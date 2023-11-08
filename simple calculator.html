@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body{
+            color: #1f2991;
+            background: rgb(172,132,217);
+background: radial-gradient(circle, rgba(172,132,217,1) 35%, rgba(123,46,212,1) 100%);
+        }  
+        .display {
+            height: 4rem;
+            width: 100%;
+            background-color: rgb(231, 231, 231);
+            padding: 2px;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            padding-top: 40px;
+            text-align: right;
+            box-shadow: 5px 5px gray inset;
+        }
+        .wrapper {
+            padding: 1.5rem;
+            max-height: fit-content;
+            min-width: 3rem;
+            max-width: 250px;
+            background-color:#fff;
+            justify-content: center;
+            border-radius: 5px;
+            display: block;
+            margin-left: calc(100% - 270px/2 - 15px - 50%);
+            box-shadow: 5px 5px rgb(148, 148, 152) ;
+        }
+
+        .grid-container {
+            display: grid;
+            padding-top: 10px;
+            grid-template-columns: 3.5rem 3.5rem 3.5rem 3.5rem;
+            gap: 10px;
+            justify-content: center;
+        }
+        .grid-container>button {
+            padding: 5px;
+            background-color: rgb(219, 219, 219);
+            border-radius: 5vh;
+
+        }
+        .grid-container>button:hover{
+            padding: 5px;
+            background-color: rgb(86, 136, 186);
+            border-radius: 5vh;
+        }
+        
+        h1{
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <h1 style="color: rgb(44, 41, 41);">Calculator</h1>
+        <div class="wrapper">
+            <div class="display">
+                <span>{{ result }}</span>
+
+                <p>{{ valueHandler }}</p>
+
+            </div>
+
+
+            <div class="grid-container">
+                <button v-for="num in numberPad" @click="addValue(numberPad[num])">{{ numberPad[num] }}</button>
+                <button v-for="op in operators" @click="addValue(op)">{{ op }}</button>
+                <button @click="clear">clear</button>
+                <button @click="evaluate">Enter</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                userInput: "",
+                result: 0,
+                numberPad: [9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
+                operators: ['-', '+', '*', '/', '%', '(', ')']
+            }
+        },
+        methods: {
+            clear(){
+            this.userInput="";
+            this.result=0;
+            },
+            evaluate() {
+                try {
+                    this.result = eval(this.userInput);
+                }
+                catch (err) {
+                    this.result = "Syntax Error";
+                }
+
+            }, addValue(val) {
+                this.userInput += val;
+                console.log(val);
+            }
+        }
+        , computed: {
+            valueHandler() {
+                return (this.userInput == '') ? '' : this.userInput;
+            }
+        }
+    });
+
+
+    app.mount("#root")
+
+</script>
+
+</html>
